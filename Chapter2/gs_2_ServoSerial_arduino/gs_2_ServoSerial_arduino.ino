@@ -11,7 +11,7 @@ void loop()
 {
   delay(100);
   if(Serial.available()) {
-    val = val*10 + (Serial.read() - '0');
+      //    
   }
 
   myservo.write(val);
