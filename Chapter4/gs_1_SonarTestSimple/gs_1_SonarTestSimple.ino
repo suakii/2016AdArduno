@@ -17,6 +17,6 @@ void loop()
   delayMicroseconds(10);
   digitalWrite(7, LOW);
   val=pulseIn(6,HIGH)/58;
-  Serial.print("Distance(cm) = ");
+  //Serial.print("Distance(cm) = ");
   Serial.println(val);
  }
