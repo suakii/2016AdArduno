@@ -53,6 +53,7 @@ void serialEvent(Serial cPort)
     if(comPortString != null)
     {
         comPortString=trim(comPortString);
+        println(comPortString);
 
         /* Use the distance received by the Arduino to modify the y position
         of the first square (others will follow). Should match the
@@ -108,13 +109,6 @@ void drawSquares()
         /* Draw the square on the screen */
         rect(mySquares[i].getX(), mySquares[i].getY(),shapeSize,shapeSize);
     }
-}
-
-/* ---------------------sketchFullScreen---------------------------*/
-// This puts processing into Full Screen Mode
-boolean sketchFullScreen()
-{
-    return true;
 }
 
 /* ---------------------CLASS: Square ---------------------------*/
