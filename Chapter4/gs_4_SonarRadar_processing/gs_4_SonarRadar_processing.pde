@@ -20,7 +20,7 @@ void setup() {
   stroke(255,0,0);
   // List all the available serial ports:
   printArray(Serial.list());
-  myPort = new Serial(this, Serial.list()[0], 115200);
+  myPort = new Serial(this, Serial.list()[0], 9600);
   myPort.bufferUntil('\n');
   
 }
