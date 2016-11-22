@@ -11,7 +11,7 @@ float total;
 
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   pinMode(servoPin, OUTPUT);
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
