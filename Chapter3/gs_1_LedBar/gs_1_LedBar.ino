@@ -1,4 +1,4 @@
-
+int del = 300;
 int first = 4;
 int last  = 13; 
 void setup() 
