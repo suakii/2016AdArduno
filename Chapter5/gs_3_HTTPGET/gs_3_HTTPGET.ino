@@ -21,7 +21,18 @@ void setup(void)
     } else {
         Serial.print("to station + softap err\r\n");
     }
+    
+    
+    if (wifi.setSoftAPParam("minaGSHS", "12345678")) {
+        Serial.print("to station + softap ok\r\n");
+    } else {
+        Serial.print("to station + softap err\r\n");
+    }
+    
+    
 
+	
+	
     if (wifi.joinAP(SSID, PASSWORD)) {
         Serial.print("Join AP success\r\n");
 
@@ -31,6 +42,9 @@ void setup(void)
         Serial.print("Join AP failure\r\n");
     }
     
+	
+	
+	
     if (wifi.disableMUX()) {
         Serial.print("single ok\r\n");
     } else {
@@ -50,7 +64,7 @@ void loop(void)
         Serial.print("create tcp err\r\n");
     }
 
-    char *hello = "GET / HTTP/1.1\r\nHost: www.google.com\r\nConnection: close\r\n\r\n";
+    char *hello = "GET / HTTP/1.1\r\nHost: www.gs.hs.kr\r\nConnection: close\r\n\r\n";
     wifi.send((const uint8_t*)hello, strlen(hello));
 
     uint32_t len = wifi.recv(buffer, sizeof(buffer), 10000);
