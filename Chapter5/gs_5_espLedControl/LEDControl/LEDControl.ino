@@ -1,31 +1,25 @@
-/*
- * 이 예제는 공유기로부터 아이피를 받고 es8266이 ap가 되고 그곳에 접속하는 것임.
- * 따라서 와이파이를 검색해서 자신이 가지고 있는 모듈에 접속해야 함.
- * esp ap 주소는 192.168.4.1 
- * http://192.168.4.1:8090/ 로 접속하는 예제임.
- * AP Name이 햇갈릴 수 있으므로 이름을 변경해 보자.
- */
+ 
 #include "ESP8266.h"
-
 #define SSID        "Jonghwa"
 #define PASSWORD    "12345678"
 
 ESP8266 wifi(Serial3);
-
-void setup(void)
+void setup()
 {
-    Serial.begin(115200);
-    Serial.print("setup begin\r\n");
-    
-    Serial.print("FW Version:");
-    Serial.println(wifi.getVersion().c_str());
-    
+  Serial.begin(115200);
+  
+  pinMode(13,OUTPUT);
+  digitalWrite(13,LOW);
+
+  Serial.print("FW Version:");
+  Serial.println(wifi.getVersion().c_str());
+
     if (wifi.setOprToStationSoftAP()) {
         Serial.print("to station + softap ok\r\n");
     } else {
         Serial.print("to station + softap err\r\n");
     }
-   
+    
     
     if (wifi.setSoftAPParam("minaGSHS", "12345678")) {
         Serial.print("to station + softap ok\r\n");
@@ -33,9 +27,9 @@ void setup(void)
         Serial.print("to station + softap err\r\n");
     }
     
+
     
-    
-    delay(500);
+    delay(500);    
     if (wifi.joinAP(SSID, PASSWORD)) {
         Serial.print("Join AP success\r\n");
         Serial.print("IP: ");
@@ -63,12 +57,12 @@ void setup(void)
         Serial.print("set tcp server timout err\r\n");
     }
     
-    Serial.print("setup end\r\n");
+    Serial.print("setup end\r\n"); 
 }
  
-void loop(void)
+void loop()
 {
-    uint8_t buffer[128] = {0};
+char buffer[256] = {0};
     uint8_t mux_id;
     uint32_t len = wifi.recv(&mux_id, buffer, sizeof(buffer), 100);
     if (len > 0) {
@@ -79,16 +73,25 @@ void loop(void)
         Serial.print("Received from :");
         Serial.print(mux_id);
         Serial.print("[");
+        /*
+          Received from :0[GET /?pin=13 HTTP/1.1
+        */
         for(uint32_t i = 0; i < len; i++) {
-            Serial.print((char)buffer[i]);
+            Serial.print(buffer[i]);
         }
         Serial.print("]\r\n");
+        //
+        String str(buffer);
+        int start = str.indexOf("pin=");
+        int pinNumber = (str[start+4] -'0')*10;
+        pinNumber += (str[start+5] -'0');
+        Serial.print("Pin Number: ");
+        Serial.println(pinNumber);
+        if (0< pinNumber && pinNumber < 14)
+          digitalWrite(pinNumber, !digitalRead(pinNumber)); // toggle pin    
+      
+        //
         
-        if(wifi.send(mux_id, buffer, len)) {
-            Serial.print("send back ok\r\n");
-        } else {
-            Serial.print("send back err\r\n");
-        }
         
         if (wifi.releaseTCP(mux_id)) {
             Serial.print("release tcp ");
@@ -104,5 +107,7 @@ void loop(void)
         Serial.print(wifi.getIPStatus().c_str());
         Serial.println("]");
     }
+
+  
 }
-        
+
